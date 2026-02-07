@@ -19,6 +19,10 @@ This project is intended for learning purposes.
 - Logo displayed using a canvas (`logo.png`)
 - Centered window with focus handling (macOS-friendly)
 
+
+<img width="573" height="417" alt="Zrzut ekranu 2026-02-7 o 13 33 26" src="https://github.com/user-attachments/assets/96749903-df10-43c0-9cc6-5a0efb20c773" />
+<img width="582" height="421" alt="Zrzut ekranu 2026-02-7 o 13 33 19" src="https://github.com/user-attachments/assets/3e7d9f70-e67d-4fe6-bcd6-9791083f0402" />
+
 ## Requirements
 
 - Python 3.8+
@@ -29,5 +33,6 @@ Install dependency:
 
 ```bash
 pip install pyperclip
-<img width="573" height="417" alt="Zrzut ekranu 2026-02-7 o 13 33 26" src="https://github.com/user-attachments/assets/96749903-df10-43c0-9cc6-5a0efb20c773" />
-<img width="582" height="421" alt="Zrzut ekranu 2026-02-7 o 13 33 19" src="https://github.com/user-attachments/assets/3e7d9f70-e67d-4fe6-bcd6-9791083f0402" />
+
+
+
