@@ -2,6 +2,7 @@ import random
 from tkinter import *
 from tkinter import messagebox
 import pyperclip
+import json
 
 FONT_NAME = "Courier"
 
@@ -9,6 +10,23 @@ FONT_NAME = "Courier"
 
 
 # ------------------- LOGIC ----------------- #
+
+def search_data():
+    website_url = website_entry.get()
+    try:
+        with open("data.json", "r") as file:
+            data = json.load(file)
+    except FileNotFoundError:
+        messagebox.showerror(title="Error", message="File not found")
+    else:
+        if website_url in data:
+            user_pw = data[website_url]["password"]
+            pyperclip.copy(user_pw)
+            messagebox.showinfo(title=website_url,
+                                message=f'e-mail: {data[website_url]["email"]}\n Password: {user_pw},\n\n Password coppied to your clippboard')
+        else:
+            messagebox.showinfo(title="Error", message="Nie zapisałeś hasła do takiej witryny")
+
 def cleaning_user_info_entry(event=None):
     user_info_entry.delete(0, END)
 
@@ -24,19 +42,33 @@ def datas_save():
     e_mail_address = user_info_entry.get()
     user_password = password_entry.get()
 
-    data_set = f'{domain_address} | {e_mail_address} | {user_password}'
+    data_set = {
+        domain_address:{
+            "email":e_mail_address,
+            "password": user_password,
+        }
+    }
     if domain_address == "" or e_mail_address == "" or user_password == "":
         messagebox.showerror(title="Błąd", message="Nie uzupełniłeś wszystkich danych")
     elif domain_address != "" or e_mail_address != "" or user_password != "":
         is_ok = messagebox.askokcancel(title=domain_address, message=f"e-mail: {e_mail_address}\n hasło: {user_password}\n Zapisać?")
         if is_ok:
             pyperclip.copy(user_password)
-            with open("data.txt", "a") as file:
-                file.write(f'{data_set}\n')
+            try:
+                with open("data.json", "r") as file:
+                    data = json.load(file)
+            except FileNotFoundError:
+                with open("data.json", "w") as file:
+                    json.dump(data_set, file, indent=4)
 
-    password_entry.delete(0, END)
-    user_info_entry.delete(0, END)
-    website_entry.delete(0, END)
+            else:
+                data.update(data_set)
+                with open("data.json", "w") as file:
+                    json.dump(data, file, indent=4)
+            finally:
+                password_entry.delete(0, END)
+                # user_info_entry.delete(0, END)
+                website_entry.delete(0, END)
 
 def password_generator():
     letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -97,7 +129,9 @@ password_entry.bind("<FocusIn>", cleaning_password_entry)
 # ----- Generate Password Button -------- #
 generate_button = Button(text="Generate Password", command=password_generator)
 generate_button.grid(column=1, row=3, sticky="e", columnspan=2, padx=(170,110))
-
+# ----- Search Button -------- #
+search_button = Button(text="Search", command=search_data)#
+search_button.grid(column=1, row=1, sticky="e", columnspan=2, padx=(170,110))
 # ------------- ADD Button ----------------- #
 add_button = Button(text="ADD", width=32, command=datas_save)
 add_button.grid(column=1, row=4, sticky="w", pady=(0, 40), columnspan=3 )
